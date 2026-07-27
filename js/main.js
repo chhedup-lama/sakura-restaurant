@@ -10,6 +10,25 @@
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* ---------------- Theme toggle ---------------- */
+  const themeToggle = $("#themeToggle");
+  const root = document.documentElement;
+  function currentTheme() { return root.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+  function applyThemeLabel() {
+    const isLight = currentTheme() === "light";
+    themeToggle.setAttribute("aria-pressed", String(isLight));
+    themeToggle.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+  }
+  if (themeToggle) {
+    applyThemeLabel();
+    themeToggle.addEventListener("click", () => {
+      const next = currentTheme() === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("sakura-theme", next); } catch (e) {}
+      applyThemeLabel();
+    });
+  }
+
   /* ---------------- Header scroll state ---------------- */
   const header = $("#siteHeader");
   const toTopBtn = $("#toTop");
